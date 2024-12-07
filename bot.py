@@ -258,9 +258,10 @@ class WebEmoji:
                     for quest in quests:
                         quest_id = str(quest['id'])
                         claimed = quest['completed']
+                        option = quest['option']
 
                         if quest and not claimed:
-                            if quest_id in ['1', '2', '8']:
+                            if option == 'PAYMENT':
                                 self.log(
                                     f"{Fore.MAGENTA + Style.BRIGHT}[ Task{Style.RESET_ALL}"
                                     f"{Fore.WHITE + Style.BRIGHT} {quest['type']} {Style.RESET_ALL}"
