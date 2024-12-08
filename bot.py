@@ -371,6 +371,15 @@ class WebEmoji:
                         if tickets <= 0:
                             break
 
+                        new_token = self.user_auth(query)['token']
+                        if new_token != token:
+                            self.log(
+                                f"{Fore.MAGENTA + Style.BRIGHT}[ Play Game{Style.RESET_ALL}"
+                                f"{Fore.YELLOW + Style.BRIGHT} New Token Detected {Style.RESET_ALL}"
+                                f"{Fore.MAGENTA + Style.BRIGHT}]{Style.RESET_ALL}"
+                            )
+                            token = new_token
+
                         play = self.play_game(token, game_name)
                         if play:
                             tickets -= 1
@@ -393,7 +402,7 @@ class WebEmoji:
                             )
                             break
 
-                        time.sleep(1)
+                        time.sleep(0.3)
 
                 if tickets == 0:
                     self.log(
