@@ -190,6 +190,9 @@ class WebEmoji:
         for attempt in range(retries):
             try:
                 response = self.session.post(url, headers=self.headers, data=data, timeout=10)
+                if response.status_code == 400:
+                    return None
+                
                 response.raise_for_status()
                 return response.json()
             except (requests.RequestException, requests.Timeout, ValueError) as e:
@@ -371,15 +374,6 @@ class WebEmoji:
                         if tickets <= 0:
                             break
 
-                        new_token = self.user_auth(query)['token']
-                        if new_token != token:
-                            self.log(
-                                f"{Fore.MAGENTA + Style.BRIGHT}[ Play Game{Style.RESET_ALL}"
-                                f"{Fore.YELLOW + Style.BRIGHT} New Token Detected {Style.RESET_ALL}"
-                                f"{Fore.MAGENTA + Style.BRIGHT}]{Style.RESET_ALL}"
-                            )
-                            token = new_token
-
                         play = self.play_game(token, game_name)
                         if play:
                             tickets -= 1
@@ -396,11 +390,21 @@ class WebEmoji:
                         else:
                             self.log(
                                 f"{Fore.MAGENTA + Style.BRIGHT}[ Play Game{Style.RESET_ALL}"
-                                f"{Fore.WHITE + Style.BRIGHT} {game_name} {Style.RESET_ALL}"
-                                f"{Fore.RED + Style.BRIGHT}Isn't Completed{Style.RESET_ALL}"
-                                f"{Fore.MAGENTA + Style.BRIGHT} ]{Style.RESET_ALL}"
+                                f"{Fore.RED + Style.BRIGHT} Isn't Completed {Style.RESET_ALL}"
+                                f"{Fore.MAGENTA + Style.BRIGHT}] [ Wait for{Style.RESET_ALL}"
+                                f"{Fore.WHITE + Style.BRIGHT} Refreshing Token... {Style.RESET_ALL}"
+                                f"{Fore.MAGENTA + Style.BRIGHT}]{Style.RESET_ALL}"
                             )
-                            break
+                            time.sleep(3)
+
+                            token = self.user_auth(query)['token']
+                            if token:
+                                self.log(
+                                    f"{Fore.MAGENTA + Style.BRIGHT}[ Play Game{Style.RESET_ALL}"
+                                    f"{Fore.GREEN + Style.BRIGHT} Token Updated Successfully {Style.RESET_ALL}"
+                                    f"{Fore.MAGENTA + Style.BRIGHT}]{Style.RESET_ALL}"
+                                )
+                                break
 
                         time.sleep(0.3)
 
