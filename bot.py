@@ -25,6 +25,7 @@ class WebEmoji:
             'Sec-Fetch-Site': 'same-origin',
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 Edg/128.0.0.0'
         }
+        self.id = '7143283584'
 
     def clear_terminal(self):
         os.system('cls' if os.name == 'nt' else 'clear')
@@ -53,7 +54,7 @@ class WebEmoji:
 
     def user_auth(self, query: str, retries=5):
         url = 'https://emojiapp.xyz/api/auth'
-        data = json.dumps({'initData':query, 'refererId':'1493482017'})
+        data = json.dumps({'initData':query, 'refererId':self.id})
         self.headers.update({
             'Content-Type': 'application/json'
         })
